@@ -17,5 +17,4 @@ Part of the 12 months Personal Engineering Challenges created by this user himse
 
 This challenge was made in order to spread STEM across Social Media, during the COVID lockdown.
 
-(Original Published date: January 16 2021 (v 1.0),
- 2nd Published date: July 31 2021 (v 2.0), uploaded to this github for recordkeeping purposes)
+(Original Published date: January 16 2021 (v 1.0), uploaded to this github for recordkeeping purposes)
