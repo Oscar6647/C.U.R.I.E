@@ -20,6 +20,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from itertools import count, cycle
 
+#Responde a los comandos mediante audio auto generado
 def response(audio):
     print(audio)
     tts = gtts.tts.gTTS(text=audio, lang="en")
@@ -44,8 +45,10 @@ def myCommand():
         print('Your last command couldn\'t be heard')
         command = myCommand()
     return command
-
+#El gran metodo que hace que todo sea funcional 
 def assistant(command):
+    
+    #Search in Wikipedia
     if 'what is ' in command:
         response("According to Wikipedia")
         reg_ex = re.search('what is (.*)', command)
@@ -54,6 +57,8 @@ def assistant(command):
             test=wikipedia.summary(subject)
             response(test)
         response("please repeat the question")
+        
+    #Enviar Mail
     if 'send email' in command:
         response("To who are we sending this email?")
         print ("please write the reciver's email")
@@ -92,41 +97,54 @@ def assistant(command):
                 smtp.send_message(msg)
             confirm = f'Email succesfuly sent to {Emailreciever}'
             response (confirm)
-        
+    
+    #Open Google
     if 'google' in command:
         response ("Openinng google")
         url="https://www.google.com/"
         webbrowser.open(url)
+        
+    #Open Youtube   
     if "youtube" in command:
         response ("Openinng youtube")
         webbrowser.open(
         'https://www.youtube.com/'
         )
+    #Open my School's Worksite
     if "canvas" in command:
         response ("Openinng canvas")
         webbrowser.open(
         'https://experiencia21.tec.mx/'
         )
+        
+    #Open facebook
     if "facebook" in command :
         response ("Openinng facebook")
         webbrowser.open(
         'https://www.facebook.com/'
         )
+        
+    #Open my drive    
     if "drive" in command:
         response ("Openinng drive")
         webbrowser.open(
         'https://drive.google.com/drive/u/1/my-drive'
         )
+        
+    #Open Reddit    
     if 'open reddit' in command:
         response ("Openning reddit")
         reg_ex = re.search('open reddit (.*)', command)
         url = 'https://www.reddit.com/'
+        
+        #Open a reddit sub (specific can be said by user)
         if reg_ex:
             subreddit = reg_ex.group(1)
             response (f"Opening subreddit {subreddit}")
             url = url + 'r/' + subreddit
         webbrowser.open(url)
 
+    #Open any website    
     elif 'open website' in command:
         reg_ex = re.search('open website (.+)', command)
         if reg_ex:
@@ -137,29 +155,43 @@ def assistant(command):
             
         else:
             pass
+        
+    #close webpage
     if 'close'in command:
         close_x(command)
         #os.system("taskkill /im chrome.exe /f")
+        
+    #tell time
     if "time" in command:
         zona_horaria = timezone('America/Monterrey') 
         fecha_hora = datetime.now(zona_horaria) 
         fecha_hora_formato = fecha_hora.strftime("%H:%M:%S") 
         response(fecha_hora_formato)
+        
+    #tell date
     if "day" in command:
         zona_horaria = timezone('America/Monterrey') 
         fecha_hora = datetime.now(zona_horaria) 
         fecha_hora_formato = fecha_hora.strftime("%B %d, %Y")
         day_week()
         response(f'Today is {day_week()} {fecha_hora_formato}')
+        
+    #Default play music
     if "play my work music" in command:
         response("Playing your Work Music!, Let's get the job done sir!")
         webbrowser.open("https://www.youtube.com/watch?v=bcyvZIoQp9A")
+        
+    #SUPER COMMANDS
+    
+    #open discord + Spotify
     if "hangout" in command:
         response("Hangout mode entered")
         discord = r"C:\Users\OCG\AppData\Local\Discord\app-0.0.308\Discord.exe"
         subprocess.Popen([discord]) 
         spotify = r"C:\Users\OCG\AppData\Roaming\Spotify\Spotify.exe"
         subprocess.Popen([spotify]) 
+        
+    #open discord+github+spotify
     if "hackathon" in command:
         response("Hackathon Mode engaged, Good Luck Sir!")
         discord = r"C:\Users\OCG\AppData\Local\Discord\app-0.0.308\Discord.exe"
@@ -168,6 +200,8 @@ def assistant(command):
         subprocess.Popen([spotify])
         github = r"C:\Users\OCG\AppData\Local\GitHubDesktop\GitHubDesktop.exe"
         subprocess.Popen([github])
+        
+    #Open zoom+school's workwebsite
     if "college" in command:
         college_mode()
         if(college_mode()==True):
@@ -179,44 +213,61 @@ def assistant(command):
             response ("I'm sorry sir, but right now you don't have classes.")
             time.sleep(2)
             response ("College Mode overrided")
+            
+    #Open spotify + vscode
     if "software" in command:
         response("Entering Software Mode")
         spotify = r"C:\Users\OCG\AppData\Roaming\Spotify\Spotify.exe"
         subprocess.Popen([spotify])
         vscode = r"C:\Users\OCG\AppData\Local\Programs\Microsoft VS Code\Code.exe"
         subprocess.Popen([vscode]) 
+        
+    #Open Eclipse
     if  "old-school" in command:
         response("Initiating Old-School Protocol")
         java = r"C:\Users\OCG\eclipse\java-photon\eclipse\eclipse.exe"
         subprocess.Popen([java])
+        
+    #Open matlab
     if  "simulation" in command:
         response("Initiating Mathematical Simulation Mode")
         matlab = r"C:\Program Files\MATLAB\R2020b\bin\matlab.exe"
         subprocess.Popen([matlab])
+        
+    #Open discord + steam
     if  "game night" in command:
         response("Initiating Game Night Protocols")
         discord = r"C:\Users\OCG\AppData\Local\Discord\app-0.0.308\Discord.exe"
         subprocess.Popen([discord])
         steam = r"C:\Program Files (x86)\Steam\steam.exe"   
         subprocess.Popen([steam]) 
+        
+   #Open CAD software
     if "hardware" in command:
         response("Starting Hardware mode")
         Digital_Design = r"C:\Program Files (x86)\LEGO Company\LEGO Digital Designer\LDD.exe"
         subprocess.Popen([Digital_Design])
+        
+    #Open CAD software + Lego Mindstorm Programming app
     if "teacher" in command:
         response("Entering Teaching mode")
         Digital_Design = r"C:\Program Files (x86)\LEGO Company\LEGO Digital Designer\LDD.exe"
         subprocess.Popen([Digital_Design])
         Ev3 = r"C:\Program Files (x86)\LEGO Software\LEGO MINDSTORMS Edu EV3\MindstormsEV3.exe"
         subprocess.Popen([Ev3])
+        
+    #Open Eclipse + FRC Project 
     if "app project" in command:
         response("Entering App Project work mode")
         java = r"C:\Users\OCG\eclipse\java-photon\eclipse\eclipse.exe"
         subprocess.Popen([java])
         frc_project = r"C:\Users\OCG\Desktop\Robot Inspector APP.exe"
         subprocess.Popen([frc_project])
+    #Introductions
     if("present yourself")in command:
         response("Hello Everyone! I am the Central Unit of Robotics Inteligence and Experiements. Or Curie for short.")
+    
+    #Control computer (Shutdown,Reboot or Sleep)
     if ("computer status") in command:
         computer_status(command)
 def computer_status (command):
@@ -236,6 +287,7 @@ def computer_status (command):
         else:
             response ("Reboot overrided")
 
+#Method to control when to activate college mode             
 def college_mode():
     correct = bool()
     if(date.today().weekday()!=6 and date.today().weekday()!=5):
@@ -246,6 +298,8 @@ def college_mode():
     else:
         correct=False
     return(correct)
+
+#Close method for specific apps
 def close_x(command):
     if "web"in command:
         os.system("taskkill /im chrome.exe /f")
@@ -271,6 +325,8 @@ def close_x(command):
         os.system("taskkill /im Spotify.exe /f")
     if "vs code" in command:
         os.system("taskkill /im Code.exe /f")
+        
+#Date method
 def day_week():
     day_week = ""  
     if date.today().weekday() == 0 :
@@ -289,7 +345,7 @@ def day_week():
         day_week="Sunday"
     return day_week
 
-
+#Predessor UI
 class ImageLabel(tk.Label):
     """
     A Label that displays images, and plays them if they are gifs
@@ -344,7 +400,8 @@ class Widget:
         gui.mainloop()
     def clicked(self):
         assistant(myCommand())
-        
+
+ #MAIN method       
 if __name__ == '__main__':
     currentTime = datetime.now()
     currentTime.hour
