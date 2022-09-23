@@ -1,8 +1,11 @@
+from tkinter import *
+import tkinter as tk
+from playsound import playsound 
+import time
 import gtts
 import speech_recognition as sr
 import os
 import re
-import time
 import webbrowser
 import smtplib
 import requests
@@ -13,20 +16,23 @@ from datetime import datetime
 from datetime import date
 from pytz import timezone 
 from email.message import EmailMessage
-
+import tkinter as tk
+from PIL import Image, ImageTk
+from itertools import count, cycle
 
 def response(audio):
     print(audio)
     tts = gtts.tts.gTTS(text=audio, lang="en")
-    tts.save("audio.wav")
-    os.system ('audio.wav')
+    tts.save("audio.mp3")
+    playsound ('audio.mp3')
+    os.remove("audio.mp3")
 
 #escucha los comandos
 def myCommand():
     #"listens for commands"
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print('Ready...')
+        response('How may i help You?')
         r.pause_threshold = 1
         r.adjust_for_ambient_noise(source, duration=1)
         audio = r.listen(source)
@@ -38,7 +44,7 @@ def myCommand():
         print('Your last command couldn\'t be heard')
         command = myCommand()
     return command
-#if statements para la ejecucion
+
 def assistant(command):
     if 'what is ' in command:
         response("According to Wikipedia")
@@ -283,14 +289,72 @@ def day_week():
         day_week="Sunday"
     return day_week
 
-currentTime = datetime.now()
-currentTime.hour
-if currentTime.hour < 12:
-    greet='Good morning'
-elif 12 <= currentTime.hour < 18:
-    greet='Good afternoon'
-else:
-    greet='Good evening'
-response (f"{greet}, my name is Curie, i am a prototype desktop helper")
-while True:
-    assistant(myCommand())
+
+class ImageLabel(tk.Label):
+    """
+    A Label that displays images, and plays them if they are gifs
+    :im: A PIL Image instance or a string filename
+    """
+    def load(self, im):
+        if isinstance(im, str):
+            im = Image.open(im)
+        frames = []
+
+        try:
+            for i in count(1):
+                frames.append(ImageTk.PhotoImage(im.copy()))
+                im.seek(i)
+        except EOFError:
+            pass
+        self.frames = cycle(frames)
+
+        try:
+            self.delay = im.info['duration']
+        except:
+            self.delay = 1
+
+        if len(frames) == 1:
+            self.config(image=next(self.frames))
+        else:
+            self.next_frame()
+
+    def unload(self):
+        self.config(image=None)
+        self.frames = None
+
+    def next_frame(self):
+        if self.frames:
+            self.config(image=next(self.frames))
+            self.after(self.delay, self.next_frame)
+
+class Widget:
+    def __init__(self):
+        gui = Tk()
+        gui.geometry("500x500")
+        gui.resizable(0,0)
+        gui.title("Central Unit of Robotics Inteligence and Experiements")
+        photo = PhotoImage(file = "LOGO.png")
+        gui.iconphoto(False, photo)
+        lbl =ImageLabel(gui)
+        lbl.load('Neutron.gif.gif')
+        lbl.pack(fill = BOTH, expand = 1)
+        callbtn = Button(gui, text ="Call C.U.R.I.E",bg='#4b4b4b', fg='black',command=self.clicked)
+        callbtn.pack()
+        callbtn.place(bordermode=OUTSIDE, height=40, width=100,x=400,y=460)
+        gui.mainloop()
+    def clicked(self):
+        assistant(myCommand())
+        
+if __name__ == '__main__':
+    currentTime = datetime.now()
+    currentTime.hour
+    if currentTime.hour < 12:
+        greet='Good morning'
+    elif 12 <= currentTime.hour < 18:
+        greet='Good afternoon'
+    else:
+        greet='Good evening'
+    response (f"{greet}, initializing systems")
+    mn = Widget()  
+        
+        
